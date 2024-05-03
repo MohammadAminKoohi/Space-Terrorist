@@ -1,5 +1,7 @@
 package view;
 
+import Controller.LoginController;
+import Controller.RegisterController;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -23,13 +25,12 @@ public class LoginScreen implements Screen {
     Label title = new Label("Space Terrorists", skin);
     Label usernameLabel = new Label("Username", skin);
     Label passwordLabel = new Label("Password", skin);
+    Label errorLabel = new Label("", skin);
     TextField username = new TextField("Username", skin);
     TextField password = new TextField("Password", skin);
     TextButton login = new TextButton("Login", skin);
     TextButton register = new TextButton("Register", skin);
     Table root = new Table();
-    Animation<TextureRegion> animation;
-    float elapsedTime;
 
     public LoginScreen(SpaceTerrorists spaceTerrorists) {
         this.spaceTerrorists = spaceTerrorists;
@@ -43,13 +44,13 @@ public class LoginScreen implements Screen {
         stage.addActor(title);
         stage.addActor(root);
         title.setFontScale(6);
-        title.setColor(1,1,1,1);
+        title.setColor(1, 1, 1, 1);
         //put the title in the middle of the screen
         title.setWidth(Gdx.graphics.getWidth());
-        title.setPosition(670, Gdx.graphics.getHeight() - title.getHeight()-200);
+        title.setPosition(670, Gdx.graphics.getHeight() - title.getHeight() - 200);
         //username setup
         usernameLabel.setFontScale(4);
-        usernameLabel.setColor(1,1,1,1);
+        usernameLabel.setColor(1, 1, 1, 1);
         usernameLabel.setAlignment(Align.center);
         root.add(usernameLabel).height(50).width(300).padTop(500).row();
         root.add(username).height(50).width(300).padTop(10).row();
@@ -57,7 +58,7 @@ public class LoginScreen implements Screen {
         username.selectAll();
         //password setup
         passwordLabel.setFontScale(4);
-        passwordLabel.setColor(1,1,1,1);
+        passwordLabel.setColor(1, 1, 1, 1);
         passwordLabel.setAlignment(Align.center);
         password.setPasswordCharacter('*');
         password.setPasswordMode(true);
@@ -65,10 +66,18 @@ public class LoginScreen implements Screen {
         root.add(password).height(50).width(300).padTop(10).row();
         //login and Register setup
         login.getLabel().setFontScale(2);
+        root.add(errorLabel).row();
         login.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                System.out.println("Login pressed");
+                LoginController loginController = new LoginController();
+                String status = loginController.login(username.getText(), password.getText());
+                if (status != null) {
+                    errorLabel.setText(status);
+                } else {
+                    LoginScreen.this.dispose();
+                    spaceTerrorists.setScreen(new MainScreen(spaceTerrorists));
+                }
             }
         });
         root.add(login).width(300).height(50).padTop(20).row();
@@ -76,7 +85,14 @@ public class LoginScreen implements Screen {
         register.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                System.out.println("Register pressed");
+                RegisterController registerController = new RegisterController();
+                String status = registerController.register(username.getText(), password.getText());
+                if (status != null) {
+                    errorLabel.setText(status);
+                } else {
+
+                    spaceTerrorists.setScreen(new MainScreen(spaceTerrorists));
+                }
             }
         });
         root.add(register).width(300).height(50).padTop(20).padBottom(450).row();
@@ -89,9 +105,8 @@ public class LoginScreen implements Screen {
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f));
         stage.draw();
-        elapsedTime += Gdx.graphics.getDeltaTime();
     }
 
     @Override
@@ -116,6 +131,6 @@ public class LoginScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }
