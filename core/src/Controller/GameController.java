@@ -100,12 +100,21 @@ public class GameController {
     public static void updatePlaneSprite() {
         player.planeSprite.setX(player.planeSprite.getX() + player.speedX * player.speed * Gdx.graphics.getDeltaTime());
         player.planeSprite.setY(player.planeSprite.getY() + player.speedY * player.speed * Gdx.graphics.getDeltaTime());
-        player.planeSprite.setRotation((float) (Math.atan2(player.speedY, player.speedX) * (180 / Math.PI)));
         if (player.speedX < 0 && player.planeSprite.getTexture() != player.planeFlipped) {
             player.planeSprite.setTexture(player.planeFlipped);
         }
         if (player.speedX > 0 && player.planeSprite.getTexture() != player.plane) {
             player.planeSprite.setTexture(player.plane);
+        }
+        player.planeSprite.setOriginCenter();
+        if(player.planeSprite.getTexture()==player.plane){
+            player.planeSprite.setRotation((float) Math.toDegrees(Math.atan2(player.speedY, player.speedX)));
+        }
+        else{
+            player.planeSprite.setRotation((float) Math.toDegrees(Math.atan2(player.speedY, player.speedX)) + 180);
+        }
+        if(player.speedX==0 && player.speedY==0){
+            player.planeSprite.setRotation(0);
         }
     }
 

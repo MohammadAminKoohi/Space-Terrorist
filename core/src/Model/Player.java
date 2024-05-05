@@ -4,6 +4,7 @@ import Model.Bomb.Bomb;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,9 @@ public class Player {
     public float hitPoints = 100;
     public int clusterBombs = 10;
     public ArrayList<Bomb> bombs;
+    //exhaust animation frames
+//    TextureRegion
+
     private Player(){
         planeSprite.setPosition(600, 600);
         planeSprite.setSize(planeSprite.getWidth()*1.3f, planeSprite.getHeight()*1.3f);

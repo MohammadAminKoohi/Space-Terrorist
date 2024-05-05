@@ -30,6 +30,7 @@ public class LoginScreen implements Screen {
     TextField password = new TextField("Password", skin);
     TextButton login = new TextButton("Login", skin);
     TextButton register = new TextButton("Register", skin);
+    TextButton Guest = new TextButton("Guest",skin);
     Table root = new Table();
 
     public LoginScreen(SpaceTerrorists spaceTerrorists) {
@@ -81,6 +82,7 @@ public class LoginScreen implements Screen {
             }
         });
         root.add(login).width(300).height(50).padTop(20).row();
+        //register setup
         register.getLabel().setFontScale(2);
         register.addListener(new ClickListener() {
             @Override
@@ -95,7 +97,16 @@ public class LoginScreen implements Screen {
                 }
             }
         });
-        root.add(register).width(300).height(50).padTop(20).padBottom(450).row();
+        root.add(register).width(300).height(50).padTop(20).row();
+        //Guest setup
+        Guest.getLabel().setFontScale(2);
+        Guest.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                spaceTerrorists.setScreen(new MainScreen(spaceTerrorists));
+            }
+        });
+        root.add(Guest).width(300).height(50).padTop(20).padBottom(450).row();
     }
 
     @Override
@@ -105,7 +116,7 @@ public class LoginScreen implements Screen {
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 144f));
         stage.draw();
     }
 

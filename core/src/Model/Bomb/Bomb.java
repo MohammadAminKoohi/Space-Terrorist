@@ -1,5 +1,6 @@
 package Model.Bomb;
 
+import Model.Collision;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -15,11 +16,12 @@ public abstract class Bomb {
     public float damage;
     public boolean isDestroyed = false;
     public boolean canMove = true;
+    public Collision collision;
     public Bomb(float x, float y, float velocityX){
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
-        this.velocityY = 0;
+        this.velocityY = -200;
     }
     public abstract void update(float delta);
     public abstract boolean isDestroyed();

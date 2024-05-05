@@ -23,6 +23,7 @@ public class AtomicBomb extends Bomb {
             if (y < 0 || y > Gdx.graphics.getHeight() || x < 0 || x > Gdx.graphics.getWidth()) {
                 isDestroyed = true;
             }
+            collision.move(x, y);
         }
     }
 

@@ -58,7 +58,7 @@ public class MainScreen implements Screen {
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 144f));
         stage.draw();
     }
 
