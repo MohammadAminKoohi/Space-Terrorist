@@ -16,16 +16,16 @@ public class Player {
     public float speedX = 0;
     public float speedY = 0;
     public float speed = 300;
-    public float hitPoints = 100;
+    public float Hitpoint = 25;
     public int clusterBombs = 10;
     public ArrayList<Bomb> bombs;
-    //exhaust animation frames
-//    TextureRegion
+    public Collision collision;
 
     private Player(){
         planeSprite.setPosition(600, 600);
         planeSprite.setSize(planeSprite.getWidth()*1.3f, planeSprite.getHeight()*1.3f);
         bombs = new ArrayList<Bomb>();
+        collision = new Collision(planeSprite.getX(), planeSprite.getY(), planeSprite.getWidth(), planeSprite.getHeight());
     }
     public static Player getPlayer(){
         return player;

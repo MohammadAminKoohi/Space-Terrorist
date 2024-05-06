@@ -21,8 +21,10 @@ public abstract class Bomb {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
-        this.velocityY = -200;
+        this.velocityY = -400;
     }
     public abstract void update(float delta);
-    public abstract boolean isDestroyed();
+    public boolean isDestroyed(){
+        return isDestroyed;
+    }
 }

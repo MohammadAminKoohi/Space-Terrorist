@@ -57,7 +57,7 @@ public class Spawner {
         buildingSpawned = true;
         int x = random.nextInt(Gdx.graphics.getWidth() - 200) + 50;
         int X;
-        Obstacle.obstacles.add(new Building(x, 250));
+        Obstacle.obstacles.add(new Building(x, 200));
         while(true){
             X = random.nextInt(Gdx.graphics.getWidth() - 200) + 50;
             if(X > 0 && X < x - 200){
@@ -67,7 +67,7 @@ public class Spawner {
                 break;
             }
         }
-        Obstacle.obstacles.add(new Building(X, 250));
+        Obstacle.obstacles.add(new Building(X, 200));
     }
     public void truckSpawner(){
         if(random.nextInt(1001) % 450 == 0){

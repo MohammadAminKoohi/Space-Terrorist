@@ -18,6 +18,7 @@ public class Alien extends Obstacle {
     float deathTimeState=0;
     boolean isDead = false;
     Animation<Texture> idle = AnimationManager.animationManager.getAlienIdle();
+    Animation<Texture> death = AnimationManager.animationManager.getAlienDead();
     public Alien(float x, float y) {
         super(x, y, 1);
         idle.setPlayMode(Animation.PlayMode.LOOP);
@@ -32,17 +33,14 @@ public class Alien extends Obstacle {
             isDead= true;
         }
         if(isDead){
-            Animation<Texture> death = AnimationManager.animationManager.getAlienDead();
-            sprite.setRegion(death.getKeyFrame(deathTimeState));
-            if(!death.isAnimationFinished(deathTimeState)){
-                deathTimeState+= Gdx.graphics.getDeltaTime();
-            }
-            else{
-                deathTimeState =0;
+            if(death.isAnimationFinished(deathTimeState)){
                 isDestroyed = true;
             }
+            else{
+                deathTimeState+= Gdx.graphics.getDeltaTime();
+            }
         }
-        else if(!idle.isAnimationFinished(timeState)){
+        if(!idle.isAnimationFinished(timeState)){
             timeState+= Gdx.graphics.getDeltaTime();}
         else{
             timeState =0;
@@ -50,7 +48,12 @@ public class Alien extends Obstacle {
     }
 
     public void render(SpriteBatch batch) {
-        sprite.setRegion(idle.getKeyFrame(timeState));
+        if(!isDead){
+            sprite.setRegion(idle.getKeyFrame(timeState));
+        }
+        else{
+            sprite.setRegion(death.getKeyFrame(deathTimeState));
+        }
         sprite.draw(batch);
     }
 }

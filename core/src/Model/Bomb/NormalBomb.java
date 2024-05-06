@@ -13,7 +13,7 @@ public class NormalBomb extends Bomb {
     float timeState = 0;
     boolean explosionStarted = false;
     public NormalBomb(float x, float y, float velocityX) {
-        super(x, y, velocityX*450);
+        super(x, y, velocityX*550);
         texture = new Texture("spaceship/Missile_01.png");
         bombSprite = new Sprite(texture);
         bombSprite.setPosition(x,y);
@@ -31,8 +31,8 @@ public class NormalBomb extends Bomb {
             bombSprite.setRotation((float) Math.toDegrees(Math.atan2(velocityY, velocityX)));
             airResistance();
             gravity();
-            if (y < 0 || y > Gdx.graphics.getHeight() || x < 0 || x > Gdx.graphics.getWidth()) {
-                isDestroyed = true;
+            if (y < 20 || y > Gdx.graphics.getHeight() || x < 0 || x > Gdx.graphics.getWidth()) {
+                canMove = false;
             }
             collision.move(x, y);
             for(Obstacle obstacle: Obstacle.obstacles){
@@ -45,8 +45,9 @@ public class NormalBomb extends Bomb {
         else {
             Animation<Texture> explosion= AnimationManager.animationManager.getBombExplosion();
             bombSprite.setRegion(explosion.getKeyFrame(timeState));
-            bombSprite.setScale(5f);
-            bombSprite.setRotation(bombSprite.getRotation()+90);
+            bombSprite.setOriginCenter();
+            bombSprite.setScale(4f);
+            bombSprite.setSize(bombSprite.getWidth() , bombSprite.getWidth() );
             if(!explosion.isAnimationFinished(timeState)){
                 timeState+= Gdx.graphics.getDeltaTime();
             }
@@ -56,23 +57,17 @@ public class NormalBomb extends Bomb {
             }
         }
     }
-    public boolean isDestroyed() {
-        if (isDestroyed) {
-            return true;
-        }
-        return false;
-    }
 
     public void airResistance() {
         if (velocityX > 0) {
-            velocityX -= 0.2f;
+            velocityX -= 0.05f;
         }
         if (velocityX < 0) {
-            velocityX += -0.2f;
+            velocityX += -0.05f;
         }
     }
 
     public void gravity() {
-        velocityY -= 10f;
+        velocityY -= 3f;
     }
 }

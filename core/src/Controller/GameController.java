@@ -100,6 +100,7 @@ public class GameController {
     public static void updatePlaneSprite() {
         player.planeSprite.setX(player.planeSprite.getX() + player.speedX * player.speed * Gdx.graphics.getDeltaTime());
         player.planeSprite.setY(player.planeSprite.getY() + player.speedY * player.speed * Gdx.graphics.getDeltaTime());
+        player.collision.move(player.planeSprite.getX(), player.planeSprite.getY());
         if (player.speedX < 0 && player.planeSprite.getTexture() != player.planeFlipped) {
             player.planeSprite.setTexture(player.planeFlipped);
         }

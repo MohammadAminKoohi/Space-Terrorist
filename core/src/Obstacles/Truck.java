@@ -13,7 +13,7 @@ public class Truck extends Obstacle{
     Sprite sprite;
     Random random = new Random();
     public Truck(float x,float y){
-        super(x,y,3);
+        super(x,y,5);
         speed= 40;
         sprite = new Sprite(texture);
         sprite.setScale(1.5f);
