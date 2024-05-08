@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class tankMissile extends Bomb {
     float timeState = 0;
     boolean explosionStarted = false;
+    float timer = 5;
 
     public tankMissile(float x, float y, float velocityX) {
         super(x, y, velocityX * 550);
@@ -23,11 +24,11 @@ public class tankMissile extends Bomb {
     }
 
     public void autoAim() {
-        float xDiff = Player.player.planeSprite.getX() - x;
-        float yDiff = Player.player.planeSprite.getY() - y;
+        float xDiff = Player.player.planeSprite.getX() + Player.player.planeSprite.getWidth()/2 - x;
+        float yDiff = Player.player.planeSprite.getY() + Player.player.planeSprite.getHeight()/2 - y;
         float distance = (float) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-        velocityX = xDiff / distance * 500;
-        velocityY = yDiff / distance * 500;
+        velocityX = xDiff / distance * 300;
+        velocityY = yDiff / distance * 300;
     }
 
     public void update(float delta) {
@@ -45,14 +46,18 @@ public class tankMissile extends Bomb {
                 Player.player.Hitpoint -= 1;
                 canMove = false;
             }
+            timer-=delta;
+            if(timer<=0){
+                canMove = false;
+            }
         } else {
-            Animation<Texture> explosion = AnimationManager.animationManager.getTankMissileExplosion();
+            Animation<Texture> explosion = AnimationManager.animationManager.getExplosion2();
             bombSprite.setRegion(explosion.getKeyFrame(timeState));
             bombSprite.setOriginCenter();
             bombSprite.setScale(4f);
             bombSprite.setSize(bombSprite.getWidth(), bombSprite.getWidth());
             if (!explosion.isAnimationFinished(timeState)) {
-                timeState += 0.1;
+                timeState += delta;
             } else {
                 timeState = 0;
                 isDestroyed = true;

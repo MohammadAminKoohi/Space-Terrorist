@@ -8,6 +8,7 @@ public class DesktopLauncher {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setForegroundFPS(144);
         config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+        config.setWindowIcon("icon.png");
         config.setTitle("Space Terrorists");
         new Lwjgl3Application(new SpaceTerrorists(), config);
     }

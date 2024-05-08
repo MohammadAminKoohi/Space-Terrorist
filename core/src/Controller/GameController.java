@@ -1,9 +1,11 @@
 package Controller;
 
+import Collectibles.Collectible;
 import Model.Bomb.AtomicBomb;
 import Model.Bomb.Bomb;
 import Model.Bomb.NormalBomb;
 import Model.Player;
+import Obstacles.Obstacle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.mygdx.game.SpaceTerrorists;
@@ -22,22 +24,25 @@ public class GameController {
         normalBomb();
         clusterBomb();
         atomicBomb();
-        removeBombs();
+        collisionsHandler();
     }
-    public static void removeBombs(){
-        for (int i = 0; i < player.bombs.size(); i++) {
-            ArrayList<Bomb> removeList = new ArrayList<Bomb>();
-               if (player.bombs.get(i).isDestroyed()) {
-                removeList.add(player.bombs.get(i));
+    public static void collisionsHandler(){
+        for(Obstacle obstacle: Obstacle.obstacles){
+            if(player.collision.isColliding(obstacle.collision)){
+                player.Hitpoint=0;
             }
-            for (Bomb bomb : removeList) {
-                player.bombs.remove(bomb);
+        }
+        for(Collectible collectible: Collectible.collectibles){
+            if(player.collision.isColliding(collectible.collision)){
+                collectible.collect();
             }
         }
     }
     public static void atomicBomb(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.R) && player.atomicBombs>0){
             player.addBomb(new AtomicBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX));
+            player.atomicBombs--;
+            player.shotCount++;
         }
     }
     public static void clusterBomb(){
@@ -48,28 +53,30 @@ public class GameController {
             player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX + 0.2f));
             player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX - 0.2f));
             player.clusterBombs--;
+            player.shotCount++;
         }
     }
     public static void normalBomb(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
             player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX));
+            player.shotCount++;
         }
     }
     public static void playerinput(SpaceTerrorists spaceTerrorists) {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            if (player.speedY < 1.3f)
+            if (player.speedY < 2f)
                 player.speedY += 0.1f;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            if (player.speedY > -1.3f)
+            if (player.speedY > -2f)
                 player.speedY -= 0.1f;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (player.speedX > -1.3f)
+            if (player.speedX > -2f)
                 player.speedX -= 0.1f;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (player.speedX < 1.3f)
+            if (player.speedX < 2f)
                 player.speedX += 0.1f;
         }
         if (!Gdx.input.isKeyPressed(Input.Keys.W) && !Gdx.input.isKeyPressed(Input.Keys.S) && !Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D)) {

@@ -1,6 +1,8 @@
 package Obstacles;
 
+import Collectibles.ClusterBombCollectible;
 import Model.Collision;
+import Model.Player;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,13 +19,14 @@ public class Wall extends Obstacle{
         sprite.setPosition(x,y);
         sprite.setScale(1f);
         collision = new Collision(x,y,sprite.getWidth(),sprite.getHeight());
+        value=3;
     }
     public void update(float delta){
-        if(Hitpoints<=0){
+        if(Hitpoints<=0 && !isDestroyed){
             isDestroyed= true;
-
+            ClusterBombCollectible clusterBombCollectible = new ClusterBombCollectible(x,y);
+            Player.player.killCount+=value;
         }
-
     }
     public void render(SpriteBatch batch){
         sprite.draw(batch);

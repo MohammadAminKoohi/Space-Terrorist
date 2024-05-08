@@ -26,6 +26,7 @@ public class Alien extends Obstacle {
         sprite.setPosition(x, y);
         sprite.setSize(25,47);
         collision = new Collision(x,y,sprite.getWidth(),sprite.getHeight());
+        value=0;
     }
 
     public void update(float delta) {
@@ -53,6 +54,7 @@ public class Alien extends Obstacle {
         }
         else{
             sprite.setRegion(death.getKeyFrame(deathTimeState));
+            sprite.setSize(47,25);
         }
         sprite.draw(batch);
     }

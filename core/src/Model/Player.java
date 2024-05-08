@@ -17,7 +17,11 @@ public class Player {
     public float speedY = 0;
     public float speed = 300;
     public float Hitpoint = 25;
-    public int clusterBombs = 10;
+    public int atomicBombs = 0;
+    public int clusterBombs = 3;
+    public int killCount = 0;
+    public int shotCount = 0;
+    public int successfullShotCount = 0;
     public ArrayList<Bomb> bombs;
     public Collision collision;
 

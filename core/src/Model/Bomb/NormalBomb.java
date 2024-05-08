@@ -2,6 +2,7 @@ package Model.Bomb;
 
 import Model.AnimationManager;
 import Model.Collision;
+import Model.Player;
 import Obstacles.Obstacle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class NormalBomb extends Bomb {
 
     float timeState = 0;
-    boolean explosionStarted = false;
     public NormalBomb(float x, float y, float velocityX) {
         super(x, y, velocityX*550);
         texture = new Texture("spaceship/Missile_01.png");
@@ -37,22 +37,22 @@ public class NormalBomb extends Bomb {
             collision.move(x, y);
             for(Obstacle obstacle: Obstacle.obstacles){
                 if(obstacle.collision.isColliding(collision)){
+                    Player.player.successfullShotCount++;
                     obstacle.Hitpoints -= 1;
                     canMove = false;
                 }
             }
         }
         else {
-            Animation<Texture> explosion= AnimationManager.animationManager.getBombExplosion();
+            Animation<Texture> explosion= AnimationManager.animationManager.getExplosion2();
             bombSprite.setRegion(explosion.getKeyFrame(timeState));
             bombSprite.setOriginCenter();
             bombSprite.setScale(4f);
             bombSprite.setSize(bombSprite.getWidth() , bombSprite.getWidth() );
             if(!explosion.isAnimationFinished(timeState)){
-                timeState+= Gdx.graphics.getDeltaTime();
+                timeState+= delta;
             }
             else{
-                timeState =0;
                 isDestroyed = true;
             }
         }
@@ -68,6 +68,6 @@ public class NormalBomb extends Bomb {
     }
 
     public void gravity() {
-        velocityY -= 3f;
+        velocityY -= 5f;
     }
 }

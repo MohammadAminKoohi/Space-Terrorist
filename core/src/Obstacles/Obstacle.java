@@ -14,6 +14,7 @@ public abstract class Obstacle {
     public int Hitpoints;
     public boolean isDestroyed = false;
     public Collision collision;
+    public int value;
 
     public Obstacle(float x, float y, int Hitpoints) {
         this.x = x;
