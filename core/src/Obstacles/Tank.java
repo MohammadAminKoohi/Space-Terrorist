@@ -3,6 +3,7 @@ package Obstacles;
 import Model.Bomb.tankMissile;
 import Model.Collision;
 import Model.Player;
+import Model.WaveManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,7 +14,6 @@ import java.util.Random;
 public class Tank extends Obstacle{
     Texture texture = new Texture("Obstacles/tank/tank.png");
     Sprite sprite;
-    Random random = new Random();
     float shootDelay = 0;
     public Tank(float x,float y){
         super(x,y,8);
@@ -33,7 +33,9 @@ public class Tank extends Obstacle{
             isDestroyed = true;
         }
         sprite.setPosition(x,y);
-        missileShoot();
+        if(WaveManager.waveManager.wave>= 2){
+            missileShoot();
+        }
         collision.move(x,y);
     }
     public void missileShoot(){

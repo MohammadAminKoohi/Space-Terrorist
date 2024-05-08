@@ -1,9 +1,6 @@
 package Model;
 
-import Obstacles.Alien;
-import Obstacles.Building;
-import Obstacles.Obstacle;
-import Obstacles.Wall;
+import Obstacles.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -17,6 +14,7 @@ public class Spawner {
     boolean buildingSpawned = false;
     boolean alienSpawned = false;
     boolean wallSpawned = false;
+    public float timer= 2;
     public void spawn(SpriteBatch batch){
         render(batch);
         if(!buildingSpawned){
@@ -30,6 +28,7 @@ public class Spawner {
         }
         truckSpawner();
         tankSpawner();
+        ufoSpawner();
     }
     public void render(SpriteBatch batch){
         for(Obstacle obstacle: Obstacle.obstacles){
@@ -70,13 +69,18 @@ public class Spawner {
         Obstacle.obstacles.add(new Building(X, 200));
     }
     public void truckSpawner(){
-        if(random.nextInt(1001) % 450 == 0){
+        if(random.nextInt(1001) % 700 == 0){
             Obstacle.obstacles.add(new Obstacles.Truck(0, random.nextInt(150)+50));
         }
     }
     public void tankSpawner(){
-        if(random.nextInt(901) % 450 == 0){
+        if(random.nextInt(901) % 700 == 0){
             Obstacle.obstacles.add(new Obstacles.Tank(0, random.nextInt(150)+50));
+        }
+    }
+    public void ufoSpawner(){
+        if(random.nextInt(901) % 700 == 0){
+            Obstacle.obstacles.add(new Obstacles.Ufo(0, random.nextInt(1000)+200));
         }
     }
 }

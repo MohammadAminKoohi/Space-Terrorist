@@ -3,10 +3,9 @@ package Model;
 import com.badlogic.gdx.Input;
 
 public class GameSettings {
-    static int difficulty = 1;
-    static int upKey = Input.Keys.W;
-    static int downKey = Input.Keys.D;
-    static int rightKey;
-    static int leftKey;
-
+    public static int difficulty = 1;
+    public static int upKey = Input.Keys.W;
+    public static int downKey = Input.Keys.S;
+    public static int rightKey = Input.Keys.D;
+    public static int leftKey = Input.Keys.A;
 }

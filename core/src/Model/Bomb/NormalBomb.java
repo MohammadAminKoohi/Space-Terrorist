@@ -35,12 +35,16 @@ public class NormalBomb extends Bomb {
                 canMove = false;
             }
             collision.move(x, y);
+            boolean successfulHit = false;
             for(Obstacle obstacle: Obstacle.obstacles){
                 if(obstacle.collision.isColliding(collision)){
-                    Player.player.successfullShotCount++;
                     obstacle.Hitpoints -= 1;
                     canMove = false;
+                    successfulHit = true;
                 }
+            }
+            if(successfulHit){
+                Player.player.successfullShotCount++;
             }
         }
         else {

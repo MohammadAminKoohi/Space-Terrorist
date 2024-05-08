@@ -37,4 +37,7 @@ public class Player {
     public void addBomb(Bomb bomb){
         bombs.add(bomb);
     }
+    public float getAccuracy(){
+return (float) Math.round(((float)successfullShotCount/shotCount)*100*100)/100;
+    }
 }
