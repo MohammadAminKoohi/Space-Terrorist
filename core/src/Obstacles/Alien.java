@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.Random;
 
 public class Alien extends Obstacle {
-    Sprite sprite;
     Random random = new Random();
     float timeState = 0;
     float deathTimeState=0;

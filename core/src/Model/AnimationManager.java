@@ -132,11 +132,32 @@ public class AnimationManager {
     Texture ufoMissileTexture58 = new Texture("Obstacles/ufo/Missile/1_58.png");
     Texture ufoMissileTexture59 = new Texture("Obstacles/ufo/Missile/1_59.png");
     Animation<Texture> greenUfoMissile = new Animation<Texture>(0.01f, ufoMissileTexture0, ufoMissileTexture1, ufoMissileTexture2, ufoMissileTexture3, ufoMissileTexture4, ufoMissileTexture5, ufoMissileTexture6, ufoMissileTexture7, ufoMissileTexture8, ufoMissileTexture9, ufoMissileTexture10, ufoMissileTexture11, ufoMissileTexture12, ufoMissileTexture13, ufoMissileTexture14, ufoMissileTexture15, ufoMissileTexture16, ufoMissileTexture17, ufoMissileTexture18, ufoMissileTexture19, ufoMissileTexture20, ufoMissileTexture21, ufoMissileTexture22, ufoMissileTexture23, ufoMissileTexture24, ufoMissileTexture25, ufoMissileTexture26, ufoMissileTexture27, ufoMissileTexture28, ufoMissileTexture29, ufoMissileTexture30, ufoMissileTexture31, ufoMissileTexture32, ufoMissileTexture33, ufoMissileTexture34, ufoMissileTexture35, ufoMissileTexture36, ufoMissileTexture37, ufoMissileTexture38, ufoMissileTexture39, ufoMissileTexture40, ufoMissileTexture41, ufoMissileTexture42, ufoMissileTexture43, ufoMissileTexture44, ufoMissileTexture45, ufoMissileTexture46, ufoMissileTexture47, ufoMissileTexture48, ufoMissileTexture49, ufoMissileTexture50, ufoMissileTexture51, ufoMissileTexture52, ufoMissileTexture53, ufoMissileTexture54, ufoMissileTexture55, ufoMissileTexture56, ufoMissileTexture57, ufoMissileTexture58, ufoMissileTexture59);
+    Texture fireTexture0= new Texture("Obstacles/Fire/Fire+Sparks1.png");
+    Texture fireTexture1 = new Texture("Obstacles/Fire/Fire+Sparks2.png");
+    Texture fireTexture2 = new Texture("Obstacles/Fire/Fire+Sparks3.png");
+    Texture fireTexture3 = new Texture("Obstacles/Fire/Fire+Sparks4.png");
+    Texture fireTexture4 = new Texture("Obstacles/Fire/Fire+Sparks5.png");
+    Texture fireTexture5 = new Texture("Obstacles/Fire/Fire+Sparks6.png");
+    Texture fireTexture6 = new Texture("Obstacles/Fire/Fire+Sparks7.png");
+    Texture fireTexture7 = new Texture("Obstacles/Fire/Fire+Sparks8.png");
+    Texture fireTexture8 = new Texture("Obstacles/Fire/Fire+Sparks9.png");
+    Texture fireTexture9 = new Texture("Obstacles/Fire/Fire+Sparks10.png");
+    Texture fireTexture10 = new Texture("Obstacles/Fire/Fire+Sparks11.png");
+    Texture fireTexture11 = new Texture("Obstacles/Fire/Fire+Sparks12.png");
+    Texture fireTexture12 = new Texture("Obstacles/Fire/Fire+Sparks13.png");
+    Texture fireTexture13 = new Texture("Obstacles/Fire/Fire+Sparks14.png");
+    Texture fireTexture14 = new Texture("Obstacles/Fire/Fire+Sparks15.png");
+    Texture fireTexture15 = new Texture("Obstacles/Fire/Fire+Sparks16.png");
+    Texture fireTexture16 = new Texture("Obstacles/Fire/Fire+Sparks17.png");
+    Texture fireTexture17 = new Texture("Obstacles/Fire/Fire+Sparks18.png");
+    Texture fireTexture18 = new Texture("Obstacles/Fire/Fire+Sparks19.png");
+    Animation<Texture> fireAnimation = new Animation<Texture>(0.1f, fireTexture0, fireTexture1, fireTexture2, fireTexture3, fireTexture4, fireTexture5, fireTexture6, fireTexture7, fireTexture8, fireTexture9, fireTexture10, fireTexture11, fireTexture12, fireTexture13, fireTexture14, fireTexture15, fireTexture16, fireTexture17, fireTexture18);
+    public Animation<Texture> getFireAnimation(){
+        return fireAnimation;
+    }
     public Animation<Texture> getUfoMissile(){
         return greenUfoMissile;
     }
-
-
     public Animation<Texture> getAlienDead() {
         return dead;
     }

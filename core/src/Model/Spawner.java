@@ -28,7 +28,9 @@ public class Spawner {
         }
         truckSpawner();
         tankSpawner();
-        ufoSpawner();
+        if(WaveManager.waveManager.wave>=3){
+            ufoSpawner();
+        }
     }
     public void render(SpriteBatch batch){
         for(Obstacle obstacle: Obstacle.obstacles){
@@ -79,8 +81,12 @@ public class Spawner {
         }
     }
     public void ufoSpawner(){
-        if(random.nextInt(901) % 700 == 0){
-            Obstacle.obstacles.add(new Obstacles.Ufo(0, random.nextInt(1000)+200));
+        if(timer<=0){
+            Obstacle.obstacles.add(new Ufo(0, random.nextInt(1300)+400));
+            timer = 2;
+        }
+        else{
+            timer-= Gdx.graphics.getDeltaTime();
         }
     }
 }

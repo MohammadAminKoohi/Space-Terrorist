@@ -11,7 +11,6 @@ import java.util.Random;
 
 public class Wall extends Obstacle{
     Texture texture = new Texture("Obstacles/wall.png");
-    Sprite sprite;
     Random random = new Random();
     public Wall(float x,float y){
         super(x,y,10);

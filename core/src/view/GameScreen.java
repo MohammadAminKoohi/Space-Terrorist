@@ -4,6 +4,7 @@ import Collectibles.Collectible;
 import Controller.GameController;
 import Model.Bomb.Bomb;
 import Model.Bomb.NormalBomb;
+import Model.Fire;
 import Model.Player;
 import Model.Spawner;
 import Model.WaveManager;
@@ -16,6 +17,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SpaceTerrorists;
@@ -34,8 +37,12 @@ public class GameScreen implements Screen {
     Label health = new Label("Health: " + Player.player.Hitpoint, skin);
     Label atomicBombs = new Label("Atomic Bombs: " + Player.player.atomicBombs, skin);
     Label clusterBombs = new Label("Cluster Bombs: " + Player.player.clusterBombs, skin);
-    Label debug = new Label("Debug", skin);
-
+    Label wave = new Label("Wave: ", skin);
+    Label accuracy = new Label("Accuracy: ", skin);
+    Window window = new Window("Paused", skin);
+    TextButton saveAndExit = new TextButton("Save and Exit", skin);
+    TextButton exit = new TextButton("Exit", skin);
+    
     public GameScreen(SpaceTerrorists spaceTerrorists) {
         this.spaceTerrorists = spaceTerrorists;
         batch = spaceTerrorists.batch;
@@ -50,26 +57,39 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        killCount.setPosition(0, Gdx.graphics.getHeight() - killCount.getHeight() - 20);
-        killCount.setFontScale(2);
-        killCount.setColor(1, 1, 1, 1);
-        stage.addActor(killCount);
-        health.setPosition(0, Gdx.graphics.getHeight() - killCount.getHeight() - health.getHeight() - 60);
-        health.setFontScale(2);
-        health.setColor(1, 1, 1, 1);
-        stage.addActor(health);
-        atomicBombs.setPosition(0, Gdx.graphics.getHeight() - killCount.getHeight() - health.getHeight() - atomicBombs.getHeight() - 100);
+        //atomic and cluster bombs
+        atomicBombs.setPosition(0, Gdx.graphics.getHeight() - 20);
+        clusterBombs.setPosition(0, Gdx.graphics.getHeight() - 50);
         atomicBombs.setFontScale(2);
-        atomicBombs.setColor(1, 1, 1, 1);
-        stage.addActor(atomicBombs);
-        clusterBombs.setPosition(0, Gdx.graphics.getHeight() - killCount.getHeight() - health.getHeight() - atomicBombs.getHeight() - clusterBombs.getHeight() - 140);
         clusterBombs.setFontScale(2);
+        atomicBombs.setColor(1, 1, 1, 1);
         clusterBombs.setColor(1, 1, 1, 1);
+        stage.addActor(atomicBombs);
         stage.addActor(clusterBombs);
-        debug.setPosition(0, Gdx.graphics.getHeight() - killCount.getHeight() - health.getHeight() - atomicBombs.getHeight() - clusterBombs.getHeight() - debug.getHeight() - 180);
-        debug.setFontScale(2);
-        debug.setColor(1, 1, 1, 1);
-        stage.addActor(debug);
+        //health and killcount
+        health.setPosition(300, Gdx.graphics.getHeight() - 20);
+        killCount.setPosition(300, Gdx.graphics.getHeight() - 50);
+        health.setFontScale(2);
+        killCount.setFontScale(2);
+        health.setColor(1, 1, 1, 1);
+        killCount.setColor(1, 1, 1, 1);
+        stage.addActor(health);
+        stage.addActor(killCount);
+        //wave
+        wave.setPosition(600, Gdx.graphics.getHeight() - 20);
+        wave.setFontScale(2);
+        wave.setColor(1, 1, 1, 1);
+        stage.addActor(wave);
+        //Accuracy
+        accuracy.setPosition(600, Gdx.graphics.getHeight() - 50);
+        accuracy.setFontScale(2);
+        accuracy.setColor(1, 1, 1, 1);
+        stage.addActor(accuracy);
+        //pause window
+        window.setSize(900, 600);
+        window.setPosition(Gdx.graphics.getWidth()/2-450,Gdx.graphics.getHeight()/2-300);
+        window.getTitleLabel().setAlignment(1);
+        window.setColor(1,1,1,0.75f);
     }
 
     @Override
@@ -77,15 +97,25 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        waveManager.waveChanger(spaceTerrorists);
+        waveManager.waveChanger(spaceTerrorists,false);
         batch.begin();
         objectRender();
         collectibleRender();
+        fireRender();
         batch.end();
-        collectibleUpdate();
-        objectUpdate();
-        gameUiUpdate();
-        removeDestroyed();
+        GameController.update(spaceTerrorists);
+        if(!spaceTerrorists.isPaused){
+            window.setVisible(false);
+            objectUpdate();
+            collectibleUpdate();
+            fireUpdate();
+            gameUiUpdate();
+            removeDestroyed();
+        }
+        else{
+            stage.addActor(window);
+            window.setVisible(true);
+        }
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 144f));
         stage.draw();
     }
@@ -95,9 +125,19 @@ public class GameScreen implements Screen {
         health.setText("Health: " + Player.player.Hitpoint);
         atomicBombs.setText("Atomic Bombs: " + Player.player.atomicBombs);
         clusterBombs.setText("Cluster Bombs: " + Player.player.clusterBombs);
-        debug.setText("Debug: " + Collectible.collectibles.size());
+        wave.setText("Wave: " + WaveManager.waveManager.wave);
+        accuracy.setText("Accuracy: " + Player.player.getAccuracy());
     }
-
+    public void fireRender(){
+        for(Fire fire:Fire.fires){
+            fire.fireSprite.draw(batch);
+        }
+    }
+    public void fireUpdate(){
+        for(Fire fire:Fire.fires){
+            fire.update(Gdx.graphics.getDeltaTime());
+        }
+    }
     public void objectRender() {
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Player.player.planeSprite.draw(batch);
@@ -108,11 +148,12 @@ public class GameScreen implements Screen {
     }
 
     public void objectUpdate() {
-        GameController.update(spaceTerrorists);
-        for (Bomb bomb : Player.player.bombs) {
-            bomb.update(Gdx.graphics.getDeltaTime());
+        if(!spaceTerrorists.isPaused){
+            for (Bomb bomb : Player.player.bombs) {
+                bomb.update(Gdx.graphics.getDeltaTime());
+            }
+            spawner.update(Gdx.graphics.getDeltaTime());
         }
-        spawner.update(Gdx.graphics.getDeltaTime());
     }
 
     public void collectibleRender() {
@@ -141,6 +182,7 @@ public class GameScreen implements Screen {
         ArrayList<Obstacle> removeList2 = new ArrayList<Obstacle>();
         for (Obstacle obstacle : Obstacle.obstacles) {
             if (obstacle.isDestroyed) {
+                Fire.fires.remove(obstacle.fire);
                 removeList2.add(obstacle);
             }
         }
@@ -185,5 +227,6 @@ public class GameScreen implements Screen {
         Collectible.collectibles = new ArrayList<Collectible>();
         Player.player.bombs = new ArrayList<Bomb>();
         Spawner.spawner = new Spawner();
+        Fire.fires = new ArrayList<Fire>();
     }
 }

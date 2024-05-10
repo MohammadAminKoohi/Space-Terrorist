@@ -13,7 +13,6 @@ import java.util.Random;
 
 public class Building extends Obstacle{
     Texture[] textures = new Texture[2];
-    Sprite sprite;
     Random random = new Random();
     public Building(float x,float y){
         super(x,y,20);

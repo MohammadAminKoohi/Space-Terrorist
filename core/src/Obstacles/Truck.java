@@ -11,7 +11,6 @@ import java.util.Random;
 
 public class Truck extends Obstacle{
     Texture texture = new Texture("Obstacles/truck.png");
-    Sprite sprite;
     Random random = new Random();
     public Truck(float x,float y){
         super(x,y,5);

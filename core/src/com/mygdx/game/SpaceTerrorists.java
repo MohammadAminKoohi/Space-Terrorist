@@ -13,6 +13,7 @@ public class SpaceTerrorists extends Game {
 
 	Texture img;
 	Sprite sprite;
+	public boolean isPaused = false;
 	public static Music music;
 	
 	@Override

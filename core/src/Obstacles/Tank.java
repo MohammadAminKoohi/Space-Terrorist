@@ -4,6 +4,7 @@ import Model.Bomb.tankMissile;
 import Model.Collision;
 import Model.Player;
 import Model.WaveManager;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,7 +14,6 @@ import java.util.Random;
 
 public class Tank extends Obstacle{
     Texture texture = new Texture("Obstacles/tank/tank.png");
-    Sprite sprite;
     float shootDelay = 0;
     public Tank(float x,float y){
         super(x,y,8);
@@ -41,7 +41,7 @@ public class Tank extends Obstacle{
     public void missileShoot(){
         Sprite planeSprite = Player.player.planeSprite;
         shootDelay+=Gdx.graphics.getDeltaTime();
-        if(shootDelay<1){
+        if(shootDelay<3){
             return;
         }
         else{

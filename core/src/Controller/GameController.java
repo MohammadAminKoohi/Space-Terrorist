@@ -5,26 +5,49 @@ import Model.Bomb.AtomicBomb;
 import Model.Bomb.Bomb;
 import Model.Bomb.NormalBomb;
 import Model.Player;
+import Model.Spawner;
+import Model.WaveManager;
 import Obstacles.Obstacle;
+import Obstacles.Tank;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.mygdx.game.SpaceTerrorists;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameController {
     private static Player player = Player.getPlayer();
+    public static Random random = new Random();
 
     public static void update(SpaceTerrorists spaceTerrorists) {
         playerinput(spaceTerrorists);
         updatePlaneSprite();
+        cheatCodes(spaceTerrorists);
         airResistance();
         boarderCheck();
         normalBomb();
         clusterBomb();
         atomicBomb();
         collisionsHandler();
+    }
+    public static void cheatCodes(SpaceTerrorists spaceTerrorists){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
+            WaveManager.waveManager.waveChanger(spaceTerrorists,true);
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.G)){
+            player.atomicBombs++;
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)){
+            player.clusterBombs++;
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.T)){
+            Obstacle.obstacles.add(new Tank(random.nextInt(Gdx.graphics.getWidth()),random.nextInt(150)+50));
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.H)){
+            player.Hitpoint=25;
+        }
     }
     public static void collisionsHandler(){
         for(Obstacle obstacle: Obstacle.obstacles){
@@ -63,6 +86,13 @@ public class GameController {
         }
     }
     public static void playerinput(SpaceTerrorists spaceTerrorists) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            spaceTerrorists.isPaused= !spaceTerrorists.isPaused;
+            return;
+        }
+        if(spaceTerrorists.isPaused){
+            return;
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (player.speedY < 2f)
                 player.speedY += 0.1f;

@@ -2,6 +2,7 @@ package Model.Bomb;
 
 import Model.AnimationManager;
 import Model.Collision;
+import Model.Fire;
 import Model.Player;
 import Obstacles.Obstacle;
 import com.badlogic.gdx.Gdx;
@@ -39,6 +40,9 @@ public class NormalBomb extends Bomb {
             for(Obstacle obstacle: Obstacle.obstacles){
                 if(obstacle.collision.isColliding(collision)){
                     obstacle.Hitpoints -= 1;
+                    if(obstacle.fire==null){
+                        obstacle.fire = new Fire(obstacle.sprite);
+                    }
                     canMove = false;
                     successfulHit = true;
                 }

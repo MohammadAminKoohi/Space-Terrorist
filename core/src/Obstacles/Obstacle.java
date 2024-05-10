@@ -1,6 +1,7 @@
 package Obstacles;
 
 import Model.Collision;
+import Model.Fire;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -15,6 +16,8 @@ public abstract class Obstacle {
     public boolean isDestroyed = false;
     public Collision collision;
     public int value;
+    public Sprite sprite;
+    public Fire fire;
 
     public Obstacle(float x, float y, int Hitpoints) {
         this.x = x;

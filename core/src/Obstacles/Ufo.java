@@ -11,11 +11,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Ufo extends Obstacle {
     Texture texture = new Texture("Obstacles/Ufo/Ufo.png");
-    Sprite sprite;
     float shootDelay = 0;
 
     public Ufo(float x, float y) {
-        super(x, y, 8);
+        super(x, y, 4);
         speed = 50;
         sprite = new Sprite(texture);
         sprite.setSize(75,50);
@@ -45,8 +44,9 @@ public class Ufo extends Obstacle {
             shootDelay = 0;
         }
         float distance = (float) Math.sqrt((planeSprite.getX() - x) * (planeSprite.getX() - x) + (planeSprite.getY() - y) * (planeSprite.getY() - y));
-        Player.player.addBomb(new UfoMissile(x, y, 1));
-
+        if(distance < 500){
+            Player.player.addBomb(new UfoMissile(x, y, 1));
+        }
     }
 
     public void render(SpriteBatch batch) {
