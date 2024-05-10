@@ -2,6 +2,7 @@ package view;
 
 import Controller.LoginController;
 import Controller.RegisterController;
+import Model.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -71,28 +72,27 @@ public class LoginScreen implements Screen {
         login.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                LoginController loginController = new LoginController();
-                String status = loginController.login(username.getText(), password.getText());
+                String status = LoginController.login(username.getText(), password.getText());
                 if (status != null) {
                     errorLabel.setText(status);
                 } else {
                     LoginScreen.this.dispose();
+                    User.loggedInUser = User.getUserByUsername(username.getText());
                     spaceTerrorists.setScreen(new MainScreen(spaceTerrorists));
                 }
             }
         });
         root.add(login).width(300).height(50).padTop(20).row();
-        //register setup
         register.getLabel().setFontScale(2);
         register.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                RegisterController registerController = new RegisterController();
-                String status = registerController.register(username.getText(), password.getText());
+                String status = RegisterController.register(username.getText(), password.getText());
                 if (status != null) {
                     errorLabel.setText(status);
                 } else {
-
+                    LoginScreen.this.dispose();
+                    User.loggedInUser = User.getUserByUsername(username.getText());
                     spaceTerrorists.setScreen(new MainScreen(spaceTerrorists));
                 }
             }

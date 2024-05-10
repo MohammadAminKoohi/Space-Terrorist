@@ -53,7 +53,6 @@ public class WavePassedScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 WaveManager.waveManager.wave++;
-                WaveManager.waveManager.reset();
                 spaceTerrorists.getScreen().dispose();
                 spaceTerrorists.setScreen(new GameScreen(spaceTerrorists));
             }

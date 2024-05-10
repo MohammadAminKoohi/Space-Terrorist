@@ -2,12 +2,9 @@ package view;
 
 import Collectibles.Collectible;
 import Controller.GameController;
+import Model.*;
 import Model.Bomb.Bomb;
 import Model.Bomb.NormalBomb;
-import Model.Fire;
-import Model.Player;
-import Model.Spawner;
-import Model.WaveManager;
 import Obstacles.Obstacle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,13 +12,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SpaceTerrorists;
+import sun.tools.jconsole.Tab;
 
 import java.util.ArrayList;
 
@@ -40,16 +36,21 @@ public class GameScreen implements Screen {
     Label wave = new Label("Wave: ", skin);
     Label accuracy = new Label("Accuracy: ", skin);
     Window window = new Window("Paused", skin);
+    TextButton resume = new TextButton("Resume", skin);
     TextButton saveAndExit = new TextButton("Save and Exit", skin);
     TextButton exit = new TextButton("Exit", skin);
-    
+    Button.ButtonStyle buttonStyle = skin.get("music", Button.ButtonStyle.class);
+    Button musicButton = new Button(buttonStyle);
+    TextButton music1Button = new TextButton("1", skin);
+    TextButton music2Button = new TextButton("2", skin);
+    TextButton music3Button = new TextButton("3", skin);
+
     public GameScreen(SpaceTerrorists spaceTerrorists) {
         this.spaceTerrorists = spaceTerrorists;
         batch = spaceTerrorists.batch;
         if (WaveManager.waveManager == null) {
             waveManager = new WaveManager();
-        }
-        else{
+        } else {
             waveManager = WaveManager.waveManager;
         }
     }
@@ -85,11 +86,78 @@ public class GameScreen implements Screen {
         accuracy.setFontScale(2);
         accuracy.setColor(1, 1, 1, 1);
         stage.addActor(accuracy);
-        //pause window
-        window.setSize(900, 600);
-        window.setPosition(Gdx.graphics.getWidth()/2-450,Gdx.graphics.getHeight()/2-300);
-        window.getTitleLabel().setAlignment(1);
-        window.setColor(1,1,1,0.75f);
+        pauseWindowSetup();
+    }
+
+    public void pauseWindowSetup() {
+        pauseButtonSetup();
+        Table root = new Table();
+        root.setFillParent(true);
+        window.setColor(1f, 1f, 1f, 0.75f);
+        window.setSize(750, 500);
+        window.setPosition(Gdx.graphics.getWidth() / 2 - window.getWidth() / 2, Gdx.graphics.getHeight() / 2 - window.getHeight() / 2);
+        window.add(root);
+        window.row().pad(150, 0, 10, 0);
+        window.add(resume).height(50).width(300).fillX();
+        window.row().pad(10, 0, 10, 0);
+        if(User.loggedInUser!=null){
+            window.add(saveAndExit).height(50).width(300).fillX();
+            window.row().pad(10, 0, 10, 0);
+        }
+        window.add(exit).height(50).width(300).fillX();
+        window.row().pad(10, 0, 10, 0);
+
+        Table musicTable = new Table();
+        musicTable.add(music1Button).height(50).width(80);
+        musicTable.add(music2Button).height(50).width(80);
+        musicTable.add(music3Button).height(50).width(80);
+
+        window.add(musicTable);
+        window.row().pad(10, 0, 10, 0);
+        window.add(musicButton);
+        stage.addActor(window);
+    }
+
+    public void pauseButtonSetup() {
+        resume.getLabel().setFontScale(2);
+        resume.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                spaceTerrorists.isPaused = false;
+                window.setVisible(false);
+            }
+        });
+        saveAndExit.getLabel().setFontScale(2);
+        saveAndExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                User.loggedInUser.saveGame();
+                spaceTerrorists.getScreen().dispose();
+                spaceTerrorists.isPaused = false;
+                spaceTerrorists.setScreen(new MainScreen(spaceTerrorists));
+            }
+        });
+        exit.getLabel().setFontScale(2);
+        exit.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                spaceTerrorists.getScreen().dispose();
+                spaceTerrorists.isPaused = false;
+                spaceTerrorists.setScreen(new MainScreen(spaceTerrorists));
+            }
+        });
+        musicButton.setChecked(true);
+        musicButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                if (SpaceTerrorists.music.isPlaying()) {
+                    SpaceTerrorists.music.pause();
+                } else {
+                    SpaceTerrorists.music.play();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -97,22 +165,21 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        waveManager.waveChanger(spaceTerrorists,false);
+        waveManager.waveChanger(spaceTerrorists, false);
         batch.begin();
         objectRender();
         collectibleRender();
         fireRender();
         batch.end();
         GameController.update(spaceTerrorists);
-        if(!spaceTerrorists.isPaused){
+        if (!spaceTerrorists.isPaused) {
             window.setVisible(false);
             objectUpdate();
             collectibleUpdate();
             fireUpdate();
             gameUiUpdate();
             removeDestroyed();
-        }
-        else{
+        } else {
             stage.addActor(window);
             window.setVisible(true);
         }
@@ -128,16 +195,19 @@ public class GameScreen implements Screen {
         wave.setText("Wave: " + WaveManager.waveManager.wave);
         accuracy.setText("Accuracy: " + Player.player.getAccuracy());
     }
-    public void fireRender(){
-        for(Fire fire:Fire.fires){
+
+    public void fireRender() {
+        for (Fire fire : Fire.fires) {
             fire.fireSprite.draw(batch);
         }
     }
-    public void fireUpdate(){
-        for(Fire fire:Fire.fires){
+
+    public void fireUpdate() {
+        for (Fire fire : Fire.fires) {
             fire.update(Gdx.graphics.getDeltaTime());
         }
     }
+
     public void objectRender() {
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Player.player.planeSprite.draw(batch);
@@ -148,7 +218,7 @@ public class GameScreen implements Screen {
     }
 
     public void objectUpdate() {
-        if(!spaceTerrorists.isPaused){
+        if (!spaceTerrorists.isPaused) {
             for (Bomb bomb : Player.player.bombs) {
                 bomb.update(Gdx.graphics.getDeltaTime());
             }

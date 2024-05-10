@@ -23,23 +23,19 @@ public class WaveManager {
             }
         }
         else if(wave==2){
-            if(Player.player.killCount>= 60|| force){
+            if(Player.player.killCount>= 100|| force){
                 spaceTerrorists.getScreen().dispose();
                 spaceTerrorists.setScreen(new WavePassedScreen(spaceTerrorists));
             }
         }
         else{
-            if(Player.player.killCount>=80 || force){
+            if(Player.player.killCount>=200 || force){
+                if(User.loggedInUser!=null){
+                    User.loggedInUser.saveGame();
+                }
                 Gdx.app.exit();
             }
         }
-    }
-
-    public void reset() {
-        Player player = Player.player;
-        player.shotCount = 0;
-        player.killCount = 0;
-        player.successfullShotCount = 0;
     }
 
 }

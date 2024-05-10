@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import Model.User;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -19,6 +20,7 @@ public class SpaceTerrorists extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		User.loadUsers();
 		this.setScreen(new LoginScreen(this));
 		music = Gdx.audio.newMusic(Gdx.files.internal("Songs/1.mp3"));
 		music.play();

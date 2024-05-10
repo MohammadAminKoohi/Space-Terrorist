@@ -1,25 +1,86 @@
 package Model;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Json;
+
+import java.util.ArrayList;
+
 public class User {
+    public static User loggedInUser;
+    public static ArrayList<User> users = new ArrayList<User>();
     private String username;
     private String password;
-    private String avatar;
+    private Texture avatar;
     private int highScore;
-    private int score;
     private int kills;
-    private int accuracy;
-    private int difficulty;
-    private int lastRound;
+    private float accuracy;
+    private int finalWave;
+    private static Json json = new Json();
+    public User(){
 
-    public User(String username, String password, String avatar, int score, int kills, int accuracy, int difficulty, int lastRound) {
+    }
+    public User(String username, String password, Texture avatar) {
         this.username = username;
         this.password = password;
-        this.avatar = avatar;
-        this.score = score;
-        this.kills = kills;
-        this.accuracy = accuracy;
-        this.difficulty = difficulty;
-        this.lastRound = lastRound;
+        this.kills = 0;
+        this.highScore = 0;
+        this.accuracy = 0;
+        this.finalWave= 1;
+        loggedInUser = this;
+        users.add(this);
+        addUser();
+    }
+    public static User getUserByUsername(String username){
+        for(User user:users){
+            if(user.getUsername().equals(username)){
+                return user;
+            }
+        }
+        return null;
+    }
+    public static void saveUsers() {
+        String usersJson = json.toJson(users);
+        FileHandle file = Gdx.files.local("users.json");
+        file.writeString(usersJson, false);
+    }
+    public void addUser(){
+        String usersJson = json.toJson(users);
+        FileHandle file = Gdx.files.local("users.json");
+        file.writeString(usersJson, false);
+    }
+
+    public static void loadUsers() {
+        FileHandle file = Gdx.files.local("users.json");
+        if (file.exists()) {
+            String usersJson = file.readString();
+            users = json.fromJson(ArrayList.class, User.class, usersJson);
+        }
+    }
+    public void saveGame(){
+        User user = loggedInUser;
+        user.setKills(Math.max(Player.player.killCount,user.getKills()));
+        user.setHighScore(Math.max(Player.player.killCount*WaveManager.waveManager.wave*10+(Player.player.atomicBombs+ Player.player.clusterBombs)*75 ,user.getHighScore()));
+        user.setAccuracy(Math.max(Player.getPlayer().getAccuracy(), user.getAccuracy()));
+        user.setFinalWave(Math.max(WaveManager.waveManager.wave,user.getFinalWave()));
+        saveUsers();
+    }
+
+    public static User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public static void setLoggedInUser(User loggedInUser) {
+        User.loggedInUser = loggedInUser;
+    }
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public static void setUsers(ArrayList<User> users) {
+        User.users = users;
     }
 
     public String getUsername() {
@@ -38,11 +99,11 @@ public class User {
         this.password = password;
     }
 
-    public String getAvatar() {
+    public Texture getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(Texture avatar) {
         this.avatar = avatar;
     }
 
@@ -54,14 +115,6 @@ public class User {
         this.highScore = highScore;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public int getKills() {
         return kills;
     }
@@ -70,27 +123,27 @@ public class User {
         this.kills = kills;
     }
 
-    public int getAccuracy() {
+    public float getAccuracy() {
         return accuracy;
     }
 
-    public void setAccuracy(int accuracy) {
+    public void setAccuracy(float accuracy) {
         this.accuracy = accuracy;
     }
 
-    public int getDifficulty() {
-        return difficulty;
+    public int getFinalWave() {
+        return finalWave;
     }
 
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
+    public void setFinalWave(int finalWave) {
+        this.finalWave = finalWave;
     }
 
-    public int getLastRound() {
-        return lastRound;
+    public static Json getJson() {
+        return json;
     }
 
-    public void setLastRound(int lastRound) {
-        this.lastRound = lastRound;
+    public static void setJson(Json json) {
+        User.json = json;
     }
 }
