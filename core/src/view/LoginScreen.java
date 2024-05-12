@@ -47,9 +47,9 @@ public class LoginScreen implements Screen {
         stage.addActor(root);
         title.setFontScale(6);
         title.setColor(1, 1, 1, 1);
-        //put the title in the middle of the screen
+        title.setSize(6*title.getWidth(),6*title.getHeight());
         title.setWidth(Gdx.graphics.getWidth());
-        title.setPosition(670, Gdx.graphics.getHeight() - title.getHeight() - 200);
+        title.setPosition(640, 850);
         //username setup
         usernameLabel.setFontScale(4);
         usernameLabel.setColor(1, 1, 1, 1);

@@ -24,7 +24,8 @@ public class Player {
     public int successfullShotCount = 0;
     public ArrayList<Bomb> bombs;
     public Collision collision;
-
+    public Fire fire;
+    public freezBar freezBar = new freezBar();
     private Player(){
         planeSprite.setPosition(600, 600);
         planeSprite.setSize(planeSprite.getWidth()*1.3f, planeSprite.getHeight()*1.3f);
@@ -33,6 +34,20 @@ public class Player {
     }
     public static Player getPlayer(){
         return player;
+    }
+    public void newGame(){
+        player.Hitpoint = 25;
+        player.atomicBombs = 0;
+        player.clusterBombs = 3;
+        player.killCount = 0;
+        player.shotCount = 0;
+        player.successfullShotCount = 0;
+        player.speedX=0;
+        player.speedY=0;
+        player.planeSprite.setPosition(600, 600);
+        bombs = new ArrayList<Bomb>();
+        collision = new Collision(planeSprite.getX(), planeSprite.getY(), planeSprite.getWidth(), planeSprite.getHeight());
+        player.fire = null;
     }
     public void addBomb(Bomb bomb){
         bombs.add(bomb);

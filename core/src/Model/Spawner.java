@@ -2,6 +2,8 @@ package Model;
 
 import Obstacles.*;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.lang.reflect.Array;
@@ -11,6 +13,9 @@ import java.util.Random;
 public class Spawner {
     public static Spawner spawner = new Spawner();
     Random random = new Random();
+    Texture alert = new Texture("Obstacles/Ufo/alert.png");
+    Sprite alertSprite = new Sprite(alert);
+    int y = 0;
     boolean buildingSpawned = false;
     boolean alienSpawned = false;
     boolean wallSpawned = false;
@@ -29,7 +34,7 @@ public class Spawner {
         truckSpawner();
         tankSpawner();
         if(WaveManager.waveManager.wave>=3){
-            ufoSpawner();
+            ufoSpawner(batch);
         }
     }
     public void render(SpriteBatch batch){
@@ -80,10 +85,21 @@ public class Spawner {
             Obstacle.obstacles.add(new Obstacles.Tank(0, random.nextInt(150)+50));
         }
     }
-    public void ufoSpawner(){
+    public void ufoSpawner(SpriteBatch batch){
+        if(y==0){
+            y = random.nextInt(1300)+200;
+        }
         if(timer<=0){
-            Obstacle.obstacles.add(new Ufo(0, random.nextInt(1300)+400));
+            Obstacle.obstacles.add(new Ufo(0, y));
             timer = 2;
+            y = 0;
+        }
+        else if(timer < 1){
+            alertSprite.setPosition(10, y);
+            alertSprite.setSize(100, 100);
+            alertSprite.setColor(1, 1, 1, 0.5f);
+            alertSprite.draw(batch);
+            timer-= Gdx.graphics.getDeltaTime();
         }
         else{
             timer-= Gdx.graphics.getDeltaTime();

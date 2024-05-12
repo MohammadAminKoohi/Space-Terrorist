@@ -28,6 +28,7 @@ public class GameScreen implements Screen {
     Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     Stage stage = new Stage(new ScreenViewport());
     Texture background = new Texture("background.png");
+    Texture freezeEffect = new Texture("freezScreen.png");
     Spawner spawner = Spawner.spawner;
     Label killCount = new Label("Kill Count: " + Player.player.killCount, skin);
     Label health = new Label("Health: " + Player.player.Hitpoint, skin);
@@ -44,6 +45,7 @@ public class GameScreen implements Screen {
     TextButton music1Button = new TextButton("1", skin);
     TextButton music2Button = new TextButton("2", skin);
     TextButton music3Button = new TextButton("3", skin);
+    freezBar freezBar = Player.player.freezBar;
 
     public GameScreen(SpaceTerrorists spaceTerrorists) {
         this.spaceTerrorists = spaceTerrorists;
@@ -86,6 +88,7 @@ public class GameScreen implements Screen {
         accuracy.setFontScale(2);
         accuracy.setColor(1, 1, 1, 1);
         stage.addActor(accuracy);
+
         pauseWindowSetup();
     }
 
@@ -100,7 +103,7 @@ public class GameScreen implements Screen {
         window.row().pad(150, 0, 10, 0);
         window.add(resume).height(50).width(300).fillX();
         window.row().pad(10, 0, 10, 0);
-        if(User.loggedInUser!=null){
+        if (User.loggedInUser != null) {
             window.add(saveAndExit).height(50).width(300).fillX();
             window.row().pad(10, 0, 10, 0);
         }
@@ -131,8 +134,6 @@ public class GameScreen implements Screen {
         saveAndExit.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                User.loggedInUser.saveGame();
-                spaceTerrorists.getScreen().dispose();
                 spaceTerrorists.isPaused = false;
                 spaceTerrorists.setScreen(new MainScreen(spaceTerrorists));
             }
@@ -146,7 +147,12 @@ public class GameScreen implements Screen {
                 spaceTerrorists.setScreen(new MainScreen(spaceTerrorists));
             }
         });
-        musicButton.setChecked(true);
+        if(SpaceTerrorists.music.isPlaying()){
+            musicButton.setChecked(true);
+        }
+        else{
+            musicButton.setChecked(false);
+        }
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
@@ -155,6 +161,34 @@ public class GameScreen implements Screen {
                 } else {
                     SpaceTerrorists.music.play();
                 }
+            }
+        });
+        //load musics 1.mp3, 2.mp3, 3.mp3 based on music number button
+        music1Button.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                SpaceTerrorists.music.stop();
+                SpaceTerrorists.music = Gdx.audio.newMusic(Gdx.files.internal("Songs/1.mp3"));
+                SpaceTerrorists.music.setLooping(true);
+                SpaceTerrorists.music.play();
+            }
+        });
+        music2Button.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                SpaceTerrorists.music.stop();
+                SpaceTerrorists.music = Gdx.audio.newMusic(Gdx.files.internal("Songs/2.mp3"));
+                SpaceTerrorists.music.setLooping(true);
+                SpaceTerrorists.music.play();
+            }
+        });
+        music3Button.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                SpaceTerrorists.music.stop();
+                SpaceTerrorists.music = Gdx.audio.newMusic(Gdx.files.internal("Songs/3.mp3"));
+                SpaceTerrorists.music.setLooping(true);
+                SpaceTerrorists.music.play();
             }
         });
 
@@ -170,8 +204,10 @@ public class GameScreen implements Screen {
         objectRender();
         collectibleRender();
         fireRender();
+        freezBar.render(batch);
         batch.end();
         GameController.update(spaceTerrorists);
+        freezBar.update(Gdx.graphics.getDeltaTime());
         if (!spaceTerrorists.isPaused) {
             window.setVisible(false);
             objectUpdate();
@@ -210,11 +246,17 @@ public class GameScreen implements Screen {
 
     public void objectRender() {
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        if(freezBar.isFreez){
+            batch.setColor(1,1,1,0.2f);
+            batch.draw(freezeEffect, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            batch.setColor(1,1,1,1);
+        }
         Player.player.planeSprite.draw(batch);
         for (Bomb bomb : Player.player.bombs) {
             bomb.bombSprite.draw(batch);
         }
         spawner.spawn(batch);
+
     }
 
     public void objectUpdate() {
@@ -222,7 +264,9 @@ public class GameScreen implements Screen {
             for (Bomb bomb : Player.player.bombs) {
                 bomb.update(Gdx.graphics.getDeltaTime());
             }
-            spawner.update(Gdx.graphics.getDeltaTime());
+            if (!freezBar.isFreez) {
+                spawner.update(Gdx.graphics.getDeltaTime());
+            }
         }
     }
 

@@ -12,11 +12,12 @@ public class User {
     public static ArrayList<User> users = new ArrayList<User>();
     private String username;
     private String password;
-    private Texture avatar;
+    private String avatarPath;
     private int highScore;
     private int kills;
     private float accuracy;
     private int finalWave;
+    private int difficulty;
     private static Json json = new Json();
     public User(){
 
@@ -28,8 +29,10 @@ public class User {
         this.highScore = 0;
         this.accuracy = 0;
         this.finalWave= 1;
+        this.difficulty=2;
         loggedInUser = this;
         users.add(this);
+        randomeAvatar();
         addUser();
     }
     public static User getUserByUsername(String username){
@@ -39,6 +42,16 @@ public class User {
             }
         }
         return null;
+    }
+    public void randomeAvatar(){
+        int random = (int)(Math.random()*3);
+        if(random == 0){
+            avatarPath = "Avatar/1.png";
+        }else if(random == 1){
+            avatarPath = "Avatar/2.png";
+        }else{
+            avatarPath = "Avatar/3.png";
+        }
     }
     public static void saveUsers() {
         String usersJson = json.toJson(users);
@@ -60,11 +73,23 @@ public class User {
     }
     public void saveGame(){
         User user = loggedInUser;
-        user.setKills(Math.max(Player.player.killCount,user.getKills()));
-        user.setHighScore(Math.max(Player.player.killCount*WaveManager.waveManager.wave*10+(Player.player.atomicBombs+ Player.player.clusterBombs)*75 ,user.getHighScore()));
-        user.setAccuracy(Math.max(Player.getPlayer().getAccuracy(), user.getAccuracy()));
-        user.setFinalWave(Math.max(WaveManager.waveManager.wave,user.getFinalWave()));
+        int highScore = Math.max(Player.player.killCount*WaveManager.waveManager.wave*10+(Player.player.atomicBombs+ Player.player.clusterBombs)*75 ,user.getHighScore());
+        if(highScore>user.getHighScore()){
+            user.setHighScore(highScore);
+            user.setKills(user.getKills()+Player.player.killCount);
+            user.setAccuracy((user.getAccuracy()+Player.player.getAccuracy())/2);
+            user.setFinalWave(WaveManager.waveManager.wave);
+            user.setDifficulty(WaveManager.waveManager.difficulty);
+        }
         saveUsers();
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
 
     public static User getLoggedInUser() {
@@ -100,11 +125,11 @@ public class User {
     }
 
     public Texture getAvatar() {
-        return avatar;
+        return  new Texture(avatarPath);
     }
 
-    public void setAvatar(Texture avatar) {
-        this.avatar = avatar;
+    public void setAvatar(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 
     public int getHighScore() {

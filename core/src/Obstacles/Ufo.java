@@ -3,6 +3,7 @@ package Obstacles;
 import Model.Bomb.UfoMissile;
 import Model.Bomb.tankMissile;
 import Model.Collision;
+import Model.GameSettings;
 import Model.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,13 +39,13 @@ public class Ufo extends Obstacle {
     public void missileShoot() {
         Sprite planeSprite = Player.player.planeSprite;
         shootDelay += Gdx.graphics.getDeltaTime();
-        if (shootDelay < 2) {
+        if (shootDelay < GameSettings.ufoShootDelay) {
             return;
         } else {
             shootDelay = 0;
         }
         float distance = (float) Math.sqrt((planeSprite.getX() - x) * (planeSprite.getX() - x) + (planeSprite.getY() - y) * (planeSprite.getY() - y));
-        if(distance < 500){
+        if(distance < GameSettings.ufoShootRange){
             Player.player.addBomb(new UfoMissile(x, y, 1));
         }
     }

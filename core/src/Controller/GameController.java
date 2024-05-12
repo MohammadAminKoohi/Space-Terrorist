@@ -1,17 +1,16 @@
 package Controller;
 
 import Collectibles.Collectible;
+import Model.*;
 import Model.Bomb.AtomicBomb;
 import Model.Bomb.Bomb;
 import Model.Bomb.NormalBomb;
-import Model.Player;
-import Model.Spawner;
-import Model.WaveManager;
 import Obstacles.Obstacle;
 import Obstacles.Tank;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.mygdx.game.SpaceTerrorists;
+import view.GameOverScreen;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,6 +21,8 @@ public class GameController {
     public static Random random = new Random();
 
     public static void update(SpaceTerrorists spaceTerrorists) {
+        deadCheck(spaceTerrorists);
+        fire();
         playerinput(spaceTerrorists);
         updatePlaneSprite();
         cheatCodes(spaceTerrorists);
@@ -31,6 +32,30 @@ public class GameController {
         clusterBomb();
         atomicBomb();
         collisionsHandler();
+        freezBarCheck(spaceTerrorists);
+    }
+    public static void freezBarCheck(SpaceTerrorists spaceTerrorists){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.TAB)){
+            if(player.freezBar.isFreez){
+                player.freezBar.isFreez = false;
+            }
+            else if(player.freezBar.freezBarWidth>=100){
+                player.freezBar.isFreez = true;
+            }
+        }
+    }
+    public static void fire(){
+        if(Player.player.Hitpoint<20){
+            if(Player.player.fire==null){
+               Player.player.fire =new Fire(Player.player.planeSprite);
+            }
+        }
+    }
+    public static void deadCheck(SpaceTerrorists spaceTerrorists){
+        if(player.Hitpoint<=0){
+            spaceTerrorists.getScreen().dispose();
+            spaceTerrorists.setScreen(new GameOverScreen(spaceTerrorists));
+        }
     }
     public static void cheatCodes(SpaceTerrorists spaceTerrorists){
         if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
@@ -93,19 +118,19 @@ public class GameController {
         if(spaceTerrorists.isPaused){
             return;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(GameSettings.upKey)) {
             if (player.speedY < 2f)
                 player.speedY += 0.1f;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(GameSettings.downKey)) {
             if (player.speedY > -2f)
                 player.speedY -= 0.1f;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(GameSettings.leftKey)) {
             if (player.speedX > -2f)
                 player.speedX -= 0.1f;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(GameSettings.rightKey)) {
             if (player.speedX < 2f)
                 player.speedX += 0.1f;
         }

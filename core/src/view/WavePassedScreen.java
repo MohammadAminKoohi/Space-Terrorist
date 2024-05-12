@@ -25,7 +25,7 @@ public class WavePassedScreen implements Screen {
     Stage stage = new Stage(new ScreenViewport());
     Texture background = new Texture("background.png");
     Label title = new Label("Wave " + WaveManager.waveManager.wave + " passed!", skin);
-    TextButton continueButton = new TextButton("new game", skin);
+    TextButton continueButton = new TextButton("Continue", skin);
     Label killCount = new Label("Kill Count: " + Player.player.killCount, skin);
     Label accuracy = new Label("Accuracy: " + Player.player.getAccuracy() + "%", skin);
     Table root = new Table();

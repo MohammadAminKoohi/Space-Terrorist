@@ -2,6 +2,7 @@ package Obstacles;
 
 import Model.Bomb.tankMissile;
 import Model.Collision;
+import Model.GameSettings;
 import Model.Player;
 import Model.WaveManager;
 import com.badlogic.gdx.Files;
@@ -17,7 +18,7 @@ public class Tank extends Obstacle{
     float shootDelay = 0;
     public Tank(float x,float y){
         super(x,y,8);
-        speed= 30;
+        speed= GameSettings.tankSpeed;
         sprite = new Sprite(texture);
         sprite.setScale(2.2f);
         collision = new Collision(x,y,sprite.getWidth(),sprite.getHeight());
@@ -41,14 +42,14 @@ public class Tank extends Obstacle{
     public void missileShoot(){
         Sprite planeSprite = Player.player.planeSprite;
         shootDelay+=Gdx.graphics.getDeltaTime();
-        if(shootDelay<3){
+        if(shootDelay<GameSettings.tankShootDelay){
             return;
         }
         else{
             shootDelay = 0;
         }
         float distance  = (float) Math.sqrt((planeSprite.getX()-x)*(planeSprite.getX()-x) + (planeSprite.getY()-y)*(planeSprite.getY()-y));
-        if(distance<500){
+        if(distance<GameSettings.tankShootRange){
             Player.player.addBomb(new tankMissile(x,y,1));
         }
     }
