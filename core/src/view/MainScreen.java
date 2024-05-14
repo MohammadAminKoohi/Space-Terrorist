@@ -1,13 +1,12 @@
 package view;
 
-import Collectibles.Collectible;
+import Model.Collectibles.Collectible;
 import Model.Bomb.Bomb;
 import Model.Fire;
 import Model.Player;
 import Model.Spawner;
 import Model.User;
-import Obstacles.Obstacle;
-import com.badlogic.gdx.Game;
+import Model.Obstacles.Obstacle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,7 +19,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SpaceTerrorists;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainScreen implements Screen {
     SpaceTerrorists spaceTerrorists;

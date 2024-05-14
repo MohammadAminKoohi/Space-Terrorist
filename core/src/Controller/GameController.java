@@ -1,20 +1,17 @@
 package Controller;
 
-import Collectibles.Collectible;
+import Model.Collectibles.Collectible;
 import Model.*;
 import Model.Bomb.AtomicBomb;
-import Model.Bomb.Bomb;
 import Model.Bomb.NormalBomb;
-import Obstacles.Obstacle;
-import Obstacles.Tank;
+import Model.Obstacles.Obstacle;
+import Model.Obstacles.Tank;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.mygdx.game.SpaceTerrorists;
 import view.GameOverScreen;
 
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameController {
     private static Player player = Player.getPlayer();

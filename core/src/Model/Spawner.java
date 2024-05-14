@@ -1,13 +1,11 @@
 package Model;
 
-import Obstacles.*;
+import Model.Obstacles.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Spawner {
@@ -77,12 +75,12 @@ public class Spawner {
     }
     public void truckSpawner(){
         if(random.nextInt(1001) % 700 == 0){
-            Obstacle.obstacles.add(new Obstacles.Truck(0, random.nextInt(150)+50));
+            Obstacle.obstacles.add(new Truck(0, random.nextInt(150)+50));
         }
     }
     public void tankSpawner(){
         if(random.nextInt(901) % 700 == 0){
-            Obstacle.obstacles.add(new Obstacles.Tank(0, random.nextInt(150)+50));
+            Obstacle.obstacles.add(new Tank(0, random.nextInt(150)+50));
         }
     }
     public void ufoSpawner(SpriteBatch batch){

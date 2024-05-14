@@ -1,6 +1,7 @@
 package view;
 
 import Model.GameSettings;
+import Model.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SpaceTerrorists;
-import sun.tools.jconsole.Tab;
 
 public class SettingsScreen implements Screen {
     SpaceTerrorists spaceTerrorists;
@@ -74,6 +74,7 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 GameSettings.setDifficulty(1);
+                User.loggedInUser.setDifficulty(1);
                 result.setText("Difficulty set to Easy");
             }
         });
@@ -81,6 +82,7 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 GameSettings.setDifficulty(2);
+                User.loggedInUser.setDifficulty(2);
                 result.setText("Difficulty set to Medium");
             }
         });
@@ -88,6 +90,7 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 GameSettings.setDifficulty(3);
+                User.loggedInUser.setDifficulty(3);
                 result.setText("Difficulty set to Hard");
             }
         });

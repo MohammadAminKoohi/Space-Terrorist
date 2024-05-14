@@ -42,7 +42,14 @@ tasks.register('dist', Jar) {
     }
     with jar
 }
-
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.mygdx.game.DesktopLauncher'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
 
 dist.dependsOn classes
 

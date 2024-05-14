@@ -2,7 +2,7 @@ package Model.Bomb;
 
 import Model.AnimationManager;
 import Model.Collision;
-import Obstacles.Obstacle;
+import Model.Obstacles.Obstacle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
