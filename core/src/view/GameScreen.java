@@ -25,8 +25,8 @@ public class GameScreen implements Screen {
     SpriteBatch batch;
     Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     Stage stage = new Stage(new ScreenViewport());
-    Texture background = new Texture("background.png");
-    Texture freezeEffect = new Texture("freezScreen.png");
+    Texture background;
+    Texture freezeEffect;
     Spawner spawner = Spawner.spawner;
     Label killCount = new Label("Kill Count: " + Player.player.killCount, skin);
     Label health = new Label("Health: " + Player.player.Hitpoint, skin);
@@ -35,6 +35,7 @@ public class GameScreen implements Screen {
     Label wave = new Label("Wave: ", skin);
     Label accuracy = new Label("Accuracy: ", skin);
     Window window = new Window("Paused", skin);
+    Label guide = new Label("use WASD or Arrow keys to move, Space to shoot, R for atomic bomb, C for cluster bomb", skin);
     TextButton resume = new TextButton("Resume", skin);
     TextButton saveAndExit = new TextButton("Save and Exit", skin);
     TextButton exit = new TextButton("Exit", skin);
@@ -47,6 +48,8 @@ public class GameScreen implements Screen {
 
     public GameScreen(SpaceTerrorists spaceTerrorists) {
         this.spaceTerrorists = spaceTerrorists;
+        background= new Texture("background.png");
+        freezeEffect= new Texture("freezScreen.png");
         batch = spaceTerrorists.batch;
         if (WaveManager.waveManager == null) {
             waveManager = new WaveManager();
@@ -95,10 +98,15 @@ public class GameScreen implements Screen {
         Table root = new Table();
         root.setFillParent(true);
         window.setColor(1f, 1f, 1f, 0.75f);
-        window.setSize(750, 500);
+        window.setSize(750, 750);
         window.setPosition(Gdx.graphics.getWidth() / 2 - window.getWidth() / 2, Gdx.graphics.getHeight() / 2 - window.getHeight() / 2);
         window.add(root);
         window.row().pad(150, 0, 10, 0);
+        guide.setFontScale(1);
+        guide.setColor(1, 1, 1, 1);
+        window.add(guide).height(50).width(750).fillX();
+        guide.setAlignment(1);
+        window.row().pad(10, 0, 10, 0);
         window.add(resume).height(50).width(300).fillX();
         window.row().pad(10, 0, 10, 0);
         if (User.loggedInUser != null) {
@@ -338,6 +346,7 @@ public class GameScreen implements Screen {
         Obstacle.obstacles = new ArrayList<Obstacle>();
         Collectible.collectibles = new ArrayList<Collectible>();
         Player.player.bombs = new ArrayList<Bomb>();
+        Player.player.fire = null;
         Spawner.spawner = new Spawner();
         Fire.fires = new ArrayList<Fire>();
     }

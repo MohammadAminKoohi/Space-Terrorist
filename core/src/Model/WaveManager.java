@@ -19,12 +19,12 @@ public class WaveManager {
 
     public void waveChanger(SpaceTerrorists spaceTerrorists, boolean force) {
         if (wave == 1) {
-            if (Player.player.killCount >= 40 || force) {
+            if (Player.player.killCount >= 80 || force) {
                 spaceTerrorists.getScreen().dispose();
                 spaceTerrorists.setScreen(new WavePassedScreen(spaceTerrorists));
             }
         } else if (wave == 2) {
-            if (Player.player.killCount >= 100 || force) {
+            if (Player.player.killCount >= 140 || force) {
                 spaceTerrorists.getScreen().dispose();
                 spaceTerrorists.setScreen(new WavePassedScreen(spaceTerrorists));
             }

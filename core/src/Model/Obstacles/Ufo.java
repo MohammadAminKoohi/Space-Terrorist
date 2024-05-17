@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Ufo extends Obstacle {
-    Texture texture = new Texture("Model/Obstacles/Ufo/Ufo.png");
+    Texture texture = new Texture("Obstacles/Ufo/Ufo.png");
     float shootDelay = 0;
 
     public Ufo(float x, float y) {

@@ -18,7 +18,9 @@ public class GameController {
     public static Random random = new Random();
 
     public static void update(SpaceTerrorists spaceTerrorists) {
-        deadCheck(spaceTerrorists);
+        if (deadCheck(spaceTerrorists)) {
+            return;
+        }
         fire();
         playerinput(spaceTerrorists);
         updatePlaneSprite();
@@ -31,88 +33,98 @@ public class GameController {
         collisionsHandler();
         freezBarCheck(spaceTerrorists);
     }
-    public static void freezBarCheck(SpaceTerrorists spaceTerrorists){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.TAB)){
-            if(player.freezBar.isFreez){
+
+    public static void freezBarCheck(SpaceTerrorists spaceTerrorists) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
+            if (player.freezBar.isFreez) {
                 player.freezBar.isFreez = false;
-            }
-            else if(player.freezBar.freezBarWidth>=100){
+            } else if (player.freezBar.freezBarWidth >= 100) {
                 player.freezBar.isFreez = true;
             }
         }
     }
-    public static void fire(){
-        if(Player.player.Hitpoint<20){
-            if(Player.player.fire==null){
-               Player.player.fire =new Fire(Player.player.planeSprite);
+
+    public static void fire() {
+        if (Player.player.Hitpoint < 20) {
+            if (Player.player.fire == null) {
+                Player.player.fire = new Fire(Player.player.planeSprite);
             }
         }
     }
-    public static void deadCheck(SpaceTerrorists spaceTerrorists){
-        if(player.Hitpoint<=0){
+
+    public static boolean deadCheck(SpaceTerrorists spaceTerrorists) {
+        if (player.Hitpoint <= 0) {
             spaceTerrorists.getScreen().dispose();
             spaceTerrorists.setScreen(new GameOverScreen(spaceTerrorists));
+            return true;
         }
+        return false;
     }
-    public static void cheatCodes(SpaceTerrorists spaceTerrorists){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
-            WaveManager.waveManager.waveChanger(spaceTerrorists,true);
+
+    public static void cheatCodes(SpaceTerrorists spaceTerrorists) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            WaveManager.waveManager.waveChanger(spaceTerrorists, true);
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.G)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
             player.atomicBombs++;
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT)) {
             player.clusterBombs++;
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.T)){
-            Obstacle.obstacles.add(new Tank(random.nextInt(Gdx.graphics.getWidth()),random.nextInt(150)+50));
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            Obstacle.obstacles.add(new Tank(random.nextInt(Gdx.graphics.getWidth()), random.nextInt(150) + 50));
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.H)){
-            player.Hitpoint=25;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+            player.Hitpoint = 25;
         }
     }
-    public static void collisionsHandler(){
-        for(Obstacle obstacle: Obstacle.obstacles){
-            if(player.collision.isColliding(obstacle.collision)){
-                player.Hitpoint=0;
+
+    public static void collisionsHandler() {
+        for (Obstacle obstacle : Obstacle.obstacles) {
+            if (player.collision.isColliding(obstacle.collision)) {
+                player.Hitpoint = 0;
             }
         }
-        for(Collectible collectible: Collectible.collectibles){
-            if(player.collision.isColliding(collectible.collision)){
+        for (Collectible collectible : Collectible.collectibles) {
+            if (player.collision.isColliding(collectible.collision)) {
                 collectible.collect();
             }
         }
     }
-    public static void atomicBomb(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.R) && player.atomicBombs>0){
-            player.addBomb(new AtomicBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX));
+
+    public static void atomicBomb() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R) && player.atomicBombs > 0) {
+            player.addBomb(new AtomicBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10, player.speedX));
             player.atomicBombs--;
             player.shotCount++;
         }
     }
-    public static void clusterBomb(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.C) && Player.player.clusterBombs > 0){
-            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX));
-            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX + 0.1f));
-            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX - 0.1f));
-            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX + 0.2f));
-            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX - 0.2f));
+
+    public static void clusterBomb() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C) && Player.player.clusterBombs > 0) {
+            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10, player.speedX));
+            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10, player.speedX + 0.1f));
+            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10, player.speedX - 0.1f));
+            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10, player.speedX + 0.2f));
+            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10, player.speedX - 0.2f));
             player.clusterBombs--;
             player.shotCount++;
         }
     }
-    public static void normalBomb(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10,player.speedX));
+
+    public static void normalBomb() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            player.addBomb(new NormalBomb(player.planeSprite.getX() + player.planeSprite.getWidth() / 2, player.planeSprite.getY() + 10, player.speedX));
             player.shotCount++;
         }
     }
+
     public static void playerinput(SpaceTerrorists spaceTerrorists) {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            spaceTerrorists.isPaused= !spaceTerrorists.isPaused;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            spaceTerrorists.isPaused = !spaceTerrorists.isPaused;
             return;
         }
-        if(spaceTerrorists.isPaused){
+        if (spaceTerrorists.isPaused) {
             return;
         }
         if (Gdx.input.isKeyPressed(GameSettings.upKey)) {
@@ -132,10 +144,10 @@ public class GameController {
                 player.speedX += 0.1f;
         }
         if (!Gdx.input.isKeyPressed(Input.Keys.W) && !Gdx.input.isKeyPressed(Input.Keys.S) && !Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if(player.speedX < 0.01f && player.speedX > -0.01f){
+            if (player.speedX < 0.01f && player.speedX > -0.01f) {
                 player.speedX = 0;
             }
-            if(player.speedY < 0.01f && player.speedY > -0.01f){
+            if (player.speedY < 0.01f && player.speedY > -0.01f) {
                 player.speedY = 0;
             }
         }
@@ -167,13 +179,12 @@ public class GameController {
             player.planeSprite.setTexture(player.plane);
         }
         player.planeSprite.setOriginCenter();
-        if(player.planeSprite.getTexture()==player.plane){
+        if (player.planeSprite.getTexture() == player.plane) {
             player.planeSprite.setRotation((float) Math.toDegrees(Math.atan2(player.speedY, player.speedX)));
-        }
-        else{
+        } else {
             player.planeSprite.setRotation((float) Math.toDegrees(Math.atan2(player.speedY, player.speedX)) + 180);
         }
-        if(player.speedX==0 && player.speedY==0){
+        if (player.speedX == 0 && player.speedY == 0) {
             player.planeSprite.setRotation(0);
         }
     }

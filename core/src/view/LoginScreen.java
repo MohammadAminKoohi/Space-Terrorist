@@ -22,7 +22,7 @@ public class LoginScreen implements Screen {
     SpriteBatch batch;
     Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     Stage stage = new Stage(new ScreenViewport());
-    Texture background = new Texture("background.png");
+    Texture background;
     Label title = new Label("Space Terrorists", skin);
     Label usernameLabel = new Label("Username", skin);
     Label passwordLabel = new Label("Password", skin);
@@ -37,6 +37,7 @@ public class LoginScreen implements Screen {
     public LoginScreen(SpaceTerrorists spaceTerrorists) {
         this.spaceTerrorists = spaceTerrorists;
         batch = spaceTerrorists.batch;
+        background = new Texture(Gdx.files.internal("background.png"));
     }
 
     @Override

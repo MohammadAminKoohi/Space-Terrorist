@@ -31,6 +31,10 @@ public class freezBar {
                 freezBarWidth += diff*10;
                 if(freezBarWidth > 500){
                     freezBarWidth = 500;
+                    freezBarSprite.setColor(0, 1, 0, 1);
+                }
+                else{
+                    freezBarSprite.setColor(1, 1, 1, 1);
                 }
                 float widthChange = freezBarWidth - oldWidth;
                 freezBarX -= widthChange; // Adjust the x position
